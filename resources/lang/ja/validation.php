@@ -129,7 +129,7 @@ return [
     ],
     
     'attributes'           => [
-        'title' => 'タイトル',
+        'name' => 'タイトル',
         'body' => '本文',
         'image' => '画像',
     ],

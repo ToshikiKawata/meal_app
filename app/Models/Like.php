@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Like extends Model
 {
     use HasFactory;
+
+    public function Posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
 }

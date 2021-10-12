@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Post extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'title',
+        'name',
         'body',
     ];
 
@@ -18,11 +19,15 @@ class Post extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function image_url()
+    {
+        return Storage::url('images/posts/' . $this->image);
+    }
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
-    public function liles()
+    public function likes()
     {
         return $this->hasMany(Like::class);
     }
@@ -30,5 +35,10 @@ class Post extends Model
     public function getImagePathAttribute()
     {
         return 'images/posts/' . $this->image;
+    }
+
+    public function getImageUrlAttribute()
+    {
+        return Storage::url($this->image_path);
     }
 }
