@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Http\Requests\PostRequest;
+use App\Models\Like;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,8 +19,6 @@ class PostController extends Controller
      */
     public function index()
     {
-        //     $posts = Post::with('user')->latest()->paginate(4);
-        //     return view('posts.index', compact('posts'));
         $posts = Post::with('user')->latest()->Paginate(4);
 
         return view('posts.index', compact('posts'));
@@ -81,10 +80,11 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        $post = Post::find($id);
-        return view('posts.show', compact('post'));
+        //$post = Post::find($id);
+        $like = Like::where('post_id', $post->id)->where('user_id', auth()->user()->id)->first();
+        return view('posts.show', compact('post', 'like'));
     }
 
     /**

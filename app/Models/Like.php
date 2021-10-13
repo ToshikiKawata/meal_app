@@ -9,9 +9,14 @@ class Like extends Model
 {
     use HasFactory;
 
-    public function Posts()
+    public function user()
     {
-        return $this->hasMany(Post::class);
+        return $this->belongsTo('App\Models\User');
+    }
+
+    public function post()
+    {
+        return $this->belongsTo('App\Models\Post');
     }
 
 }

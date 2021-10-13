@@ -9,13 +9,37 @@
             </h2>
             <h3>{{ $post->user->name }}</h3>
             <p class="text-sm mb-2 md:text-base font-normal text-gray-600">
+                {{ $post->created_at->diffForHumans() }}
+            </p>
+            <p class="text-sm mb-2 md:text-base font-normal text-gray-600">
                 <span
                     class="text-red-400 font-bold">{{ date('Y-m-d H:i:s', strtotime('-1 day')) < $post->created_at ? 'NEW' : '' }}</span>
-                {{ $post->created_at }}
+                記事作成日:{{ $post->created_at }}
             </p>
             <img src="{{ $post->image_url() }}" alt="" class="mb-4">
             <p class="text-gray-700 text-base">{!! nl2br(e($post->body)) !!}</p>
         </article>
+
+        @if ($like)
+            <!-- 「いいね」取消用ボタンを表示 -->
+            <form action="{{ route('posts.like.destroy', [$post, $like]) }}" method="POST">
+                いいね
+                <!-- 「いいね」の数を表示 -->
+                <span class="badge">
+                    {{ $post->likes->count() }}
+                </span>
+            </form>
+        @else
+            <!-- まだユーザーが「いいね」をしていなければ、「いいね」ボタンを表示 -->
+            <form action="{{ route('posts.like.store', [$post, $like]) }}" method="POST">
+                いいね
+                <!-- 「いいね」の数を表示 -->
+                <span class="badge">
+                    {{ $post->likes->count() }}
+                </span>
+            </form>
+        @endif
+
         <div class="flex flex-row text-center my-4">
             @can('update', $post)
                 <a href="{{ route('posts.edit', $post) }}"
