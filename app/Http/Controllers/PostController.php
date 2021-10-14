@@ -170,14 +170,14 @@ class PostController extends Controller
         try {
             $post->delete();
 
-        if (!Storage::delete($post->image_path)) {
-            throw new \Exception('画像ファイルの削除に失敗しました。');
-        }
-        DB::commit();
+            if (!Storage::delete($post->image_path)) {
+                throw new \Exception('画像ファイルの削除に失敗しました。');
+            }
+            DB::commit();
         } catch (\Exception $e) {
             //throw $th;
-        DB::rollBack();
-        return back()->withErrors($e->getMessage());
+            DB::rollBack();
+            return back()->withErrors($e->getMessage());
         }
 
         return redirect()->route('posts.index')
