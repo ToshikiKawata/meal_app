@@ -82,9 +82,6 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        // //$post = Post::find($id);
-        // $like = Like::where('post_id', $post->id)->where('user_id', auth()->user()->id)->first();
-        // return view('posts.show', compact('post', 'like'));
         $post = Post::find($id);
         if (Auth::check()) {
             $like = Like::where('post_id', $post->id)->where('user_id', auth()->user()->id)->first();
@@ -169,22 +166,21 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         // トランザクション開始
-            DB::beginTransaction();
-            try {
-                $post->delete();
+        DB::beginTransaction();
+        try {
+            $post->delete();
 
-                if (!Storage::delete($post->image_path)) {
-                    throw new \Exception('画像ファイルの削除に失敗しました。');
-                }
+        if (!Storage::delete($post->image_path)) {
+            throw new \Exception('画像ファイルの削除に失敗しました。');
+        }
+        DB::commit();
+        } catch (\Exception $e) {
+            //throw $th;
+        DB::rollBack();
+        return back()->withErrors($e->getMessage());
+        }
 
-                DB::commit();
-            } catch (\Exception $e) {
-                //throw $th;
-                DB::rollBack();
-                return back()->withErrors($e->getMessage());
-            }
-
-            return redirect()->route('posts.index')
+        return redirect()->route('posts.index')
             ->with('notice', '記事を削除しました');
     }
 
