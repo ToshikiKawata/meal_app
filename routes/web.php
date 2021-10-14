@@ -22,15 +22,15 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::resource('posts', PostController::class)
-    ->only(['create', 'store', 'edit', 'update', 'destroy'])
-    ->middleware('auth');
+    ->middleware('auth')
+    ->only(['create', 'store', 'edit', 'update', 'destroy']);
 
 Route::resource('posts', PostController::class)
     ->only(['show', 'index']);
 
 // 以下がいいね機能のルーティングになります
 Route::resource('posts.likes', LikeController::class)
-->middleware('auth')
-->only(['store', 'destroy']);
+    ->middleware('auth')
+    ->only(['store', 'destroy']);
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

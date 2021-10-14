@@ -29,14 +29,11 @@ class PostRequest extends FormRequest
             'name' => 'required|string|max:50',
             'category_id' => 'required',
             'body' => 'required|string|max:2000',
-            //'image' => 'required|file|image|mimes:jpeg,png',
         ];
-        if (
-            $route === 'posts.store' ||
-            ($route === 'posts.update' && $this->file('image'))) {
+        if ($route === 'posts.store' ||
+            $route === 'posts.update' && $this->file('image')) {
             $rule['image'] = 'required|file|image|mimes:jpeg,png';
         }
-
         return $rule;
     }
 }
